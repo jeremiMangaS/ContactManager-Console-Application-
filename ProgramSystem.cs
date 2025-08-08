@@ -1,5 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Formats.Asn1;
+using System.IO;
+
+using ProgramSystemData;
 
 namespace ProgramSystem
 {
@@ -22,6 +26,7 @@ namespace ProgramSystem
         public static ProgramSystemClass CreatingObjectContact(string name, string email, int number)
         {
             ProgramSystemClass newContact = new ProgramSystemClass(name, email, number);
+            ProgramSystemDataClass.StringData(name, email, number);
 
             return newContact;
         }
@@ -31,17 +36,23 @@ namespace ProgramSystem
             contactManagement.Add(newObject);
         }
 
+
         public static void ShowMoreIteration()
         {
-            if (contactManagement.Count == 0)
-            {
-                Console.WriteLine("Contact is still empty...");
-            }
+            string getFileData = ProgramSystemDataClass.GetDataFile();
+            string[] getDataLine = File.ReadAllLines(getFileData);
+
+            if (!File.Exists(getFileData)) Console.WriteLine("Data can't be find...");
+            else if (getDataLine.Length == 0) Console.WriteLine("Contact is still empty...");
             else
             {
-                for (int i = 0; i < contactManagement.Count; i++)
+                for (int i = 0; i < getDataLine.Length; i++)
                 {
-                    Console.WriteLine($"hasil {i + 1} : {contactManagement[i].contactName}  |  {contactManagement[i].contactEmail}  |  {contactManagement[i].contactNumber}  | ");
+                    string[] column = getDataLine[i].Split(',');
+                    if (column.Length == 3)
+                    {
+                        Console.WriteLine($"{i + 1}. {column[0]}  |  {column[1]}  |  {column[2]}  |");
+                    }
                 }
             }
         }
@@ -49,22 +60,29 @@ namespace ProgramSystem
         public static void DefaultContactIteration()
         {
             int defaultIteration = 4;
+            string getFileData = ProgramSystemDataClass.GetDataFile();
+            string[] getDataLine = File.ReadAllLines(getFileData);
 
-            if (contactManagement.Count == 0)
-            {
-                Console.WriteLine("Contact is still empty...");
-            }
+            if (!File.Exists(getFileData)) Console.WriteLine("Data can't be find...");
+            else if (getDataLine.Length == 0) Console.WriteLine("Contact is still empty...");
             else
             {
                 for (int i = 0; i < defaultIteration; i++)
                 {
-                    if ((i + 1) > contactManagement.Count)
+
+                    string[] column = getDataLine[i].Split(',');
+
+                    if ((i + 1) > getDataLine.Length)
                     {
                         Console.WriteLine("");
                     }
+                    else if (column.Length == 3)
+                    {
+                        Console.WriteLine($"{i + 1}. {column[0]}  |  {column[1]}  |  {column[2]}  |");
+                    }
                     else
                     {
-                        Console.WriteLine($"hasil {i + 1} : {contactManagement[i].contactName}  |  {contactManagement[i].contactEmail}  |  {contactManagement[i].contactNumber}  | ");
+                        Console.WriteLine("Invalid data...");
                     }
                 }
             }
