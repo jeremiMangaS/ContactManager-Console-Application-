@@ -28,6 +28,8 @@ namespace MainProgram
                 else if (userInput.Key == ConsoleKey.X)
                 {
                     Console.WriteLine("Delete");
+
+                    MenuSystemClass.DeleteContactMenu();
                 }
                 else if (userInput.Key == ConsoleKey.S)
                 {

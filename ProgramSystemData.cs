@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace ProgramSystemData
@@ -11,6 +12,11 @@ namespace ProgramSystemData
         {
             File.AppendAllText(fileData, StringDataModel(name, email, number) + Environment.NewLine);
             Console.WriteLine("Berhasil memasukkan ke database !");
+        }
+
+        public static void StringDataUpdate(List<string> newDataLines)
+        {
+            File.WriteAllLines(fileData, newDataLines);
         }
 
         static string StringDataModel(string name, string email, int number)

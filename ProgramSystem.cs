@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Formats.Asn1;
 using System.IO;
-
+using System.Reflection.Metadata.Ecma335;
 using ProgramSystemData;
 
 namespace ProgramSystem
@@ -31,61 +31,57 @@ namespace ProgramSystem
             return newContact;
         }
 
-        public static void AddObjectToList(ProgramSystemClass newObject)
-        {
-            contactManagement.Add(newObject);
-        }
+        public static void AddObjectToList(ProgramSystemClass newObject) => contactManagement.Add(newObject);
 
 
         public static void ShowMoreIteration()
         {
-            string getFileData = ProgramSystemDataClass.GetDataFile();
-            string[] getDataLine = File.ReadAllLines(getFileData);
-
-            if (!File.Exists(getFileData)) Console.WriteLine("Data can't be find...");
-            else if (getDataLine.Length == 0) Console.WriteLine("Contact is still empty...");
-            else
+            Console.WriteLine("Is it works ?");
+            for (int i = 0; i < contactManagement.Count; i++)
             {
-                for (int i = 0; i < getDataLine.Length; i++)
-                {
-                    string[] column = getDataLine[i].Split(',');
-                    if (column.Length == 3)
-                    {
-                        Console.WriteLine($"{i + 1}. {column[0]}  |  {column[1]}  |  {column[2]}  |");
-                    }
-                }
+                Console.WriteLine($"{i + 1}. {contactManagement[i].contactName}");
             }
         }
 
         public static void DefaultContactIteration()
         {
             int defaultIteration = 4;
-            string getFileData = ProgramSystemDataClass.GetDataFile();
-            string[] getDataLine = File.ReadAllLines(getFileData);
-
-            if (!File.Exists(getFileData)) Console.WriteLine("Data can't be find...");
-            else if (getDataLine.Length == 0) Console.WriteLine("Contact is still empty...");
+            LoadData();
+            if (contactManagement.Count == 0) Console.WriteLine("Data can't be find...");
             else
             {
                 for (int i = 0; i < defaultIteration; i++)
                 {
-
-                    string[] column = getDataLine[i].Split(',');
-
-                    if ((i + 1) > getDataLine.Length)
-                    {
-                        Console.WriteLine("");
-                    }
-                    else if (column.Length == 3)
-                    {
-                        Console.WriteLine($"{i + 1}. {column[0]}  |  {column[1]}  |  {column[2]}  |");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Invalid data...");
-                    }
+                    if ((i + 1) > contactManagement.Count) Console.WriteLine("");
+                    else Console.WriteLine($"{i + 1}. {contactManagement[i].contactName} | {contactManagement[i].contactEmail} | {contactManagement[i].contactNumber}  |");
                 }
             }
+        }
+
+        public static void LoadData()
+        {
+            contactManagement.Clear();
+            string getFileData = ProgramSystemDataClass.GetDataFile();
+            string[] getDataLine = File.ReadAllLines(getFileData);
+
+            for (int i = 0; i < getDataLine.Length; i++)
+            {
+                string[] column = getDataLine[i].Split(',');
+                int.TryParse(column[2], out int numberColumn);
+                ProgramSystemClass newObject = new ProgramSystemClass(column[0], column[1], numberColumn);
+                contactManagement.Add(newObject);
+            }
+        }
+
+        public static void DeletingObjectContact(int contactIndex)
+        {
+            contactManagement.RemoveAt(contactIndex);
+            var dataLines = new List<string>();
+            for (int i = 0; i < contactManagement.Count; i++)
+            {
+                dataLines.Add($"{contactManagement[i].contactName}, {contactManagement[i].contactEmail}, {contactManagement[i].contactNumber}");
+            }
+            ProgramSystemDataClass.StringDataUpdate(dataLines);
         }
 
     }

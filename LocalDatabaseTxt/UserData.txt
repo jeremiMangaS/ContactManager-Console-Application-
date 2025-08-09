@@ -1,5 +1,12 @@
-Mangatur Jeremi Silitonga, Sukses.Com, 1234
-Andika Bartlomeu Kuma, Andika@com, 1234
-Samugar Samugis, Samug.Com, 1234
-Sugos Rowan Nahesson, Cumlaude.Com, 123
-Sarensaren, asd@com, 1234
+Mangatur,    asdf, 123
+Mangatur,     asdf, 123
+sdfg,      wdef, 123
+Mangatur,     asdf, 123
+sdfg,      wdef, 123
+Mangatur,     asdf, 123
+sdfg,      wdef, 123
+Mangatur,     asdf, 123
+sdfg,      wdef, 123
+sdfg,      wdef, 123
+Mangatur,     asdf, 123
+Jurnal,   asd, 23

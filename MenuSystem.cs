@@ -1,6 +1,8 @@
 using System;
+using System.IO;
 using System.Runtime.CompilerServices;
 using ProgramSystem;
+using ProgramSystemData;
 
 namespace MenuSystem
 {
@@ -71,7 +73,16 @@ namespace MenuSystem
             ProgramSystemClass.ShowMoreIteration();
         }
 
-
+        public static void DeleteContactMenu()
+        {
+            Console.Write("Enter the contact index : ");
+            if (!int.TryParse(Console.ReadLine(), out int contactIndex))
+            {
+                Console.WriteLine("Input invalid...");
+                return;
+            }
+            ProgramSystemClass.DeletingObjectContact(contactIndex - 1);            
+        }
 
     }
 }
