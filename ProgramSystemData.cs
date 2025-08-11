@@ -8,7 +8,7 @@ namespace ProgramSystemData
     {
         static string fileData = @"LocalDatabaseTxt\UserData.txt"; // The local database 'txt'
 
-        public static void StringData(string name, string email, int number)
+        public static void StringData(string name, string email, long number)
         {
             File.AppendAllText(fileData, StringDataModel(name, email, number) + Environment.NewLine);
             Console.WriteLine("Done... !");
@@ -22,7 +22,7 @@ namespace ProgramSystemData
             // Writeing all lines from previous function into fileData with newDataLines as the parameter 
         }
 
-        static string StringDataModel(string name, string email, int number)
+        static string StringDataModel(string name, string email, long number)
         {
             string dataModel = $"{name},{email},{number}";
             return dataModel;

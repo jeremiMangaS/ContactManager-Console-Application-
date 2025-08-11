@@ -2,27 +2,37 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Threading;
+using MenuSystem;
 using ProgramSystemData;
 
 namespace ProgramSystem
 {
     class ProgramSystemClass
     {
+        static int loadTime = 500; // Load duration for all transitions
         private string contactName;
         private string contactEmail;
-        private int contactNumber;
+        private long contactNumber;
 
         static List<ProgramSystemClass> contactManagement = new List<ProgramSystemClass>(); // List for Contact
 
-        ProgramSystemClass(string name, string email, int number) // Constructor
+        ProgramSystemClass(string name, string email, long number) // Constructor
         {
             this.contactName = name;
             this.contactEmail = email;
             this.contactNumber = number;
         }
 
+        public static bool InputValidation(int userInput)
+        {
+            if (userInput > contactManagement.Count || userInput <= 0) return false;
+            return true;
+        }
 
-        public static ProgramSystemClass CreatingObjectContact(string name, string email, int number)
+
+        public static ProgramSystemClass CreatingObjectContact(string name, string email, long number)
         {
             // For making object from the Constructor
             ProgramSystemClass newContact = new ProgramSystemClass(name, email, number);
@@ -38,10 +48,9 @@ namespace ProgramSystem
         public static void ShowMoreIteration()
         {
             // Loop for display the list of saved contacts from Menu
-            Console.WriteLine("Is it works ?");
             for (int i = 0; i < contactManagement.Count; i++)
             {
-                Console.WriteLine($"{i + 1}. {contactManagement[i].contactName}");
+                Console.WriteLine($"{i + 1}. {contactManagement[i].contactName}  |  {contactManagement[i].contactEmail}  |  {contactManagement[i].contactNumber}");
             }
         }
 
@@ -80,7 +89,27 @@ namespace ProgramSystem
         public static void DeletingObjectContact(int contactIndex)
         {
             // Method for deleting object from List then rewrite everything into txt data via 'for' loop
-            contactManagement.RemoveAt(contactIndex);
+            while (true)
+            {
+                Console.WriteLine($"Name : {contactManagement[contactIndex].contactName}");
+                Console.WriteLine($"Email : {contactManagement[contactIndex].contactEmail}");
+                Console.WriteLine($"Number : {contactManagement[contactIndex].contactNumber}");
+                Console.WriteLine("Are you sure you want to delete this contact ? Y/n");
+                ConsoleKeyInfo userInput = Console.ReadKey(true);
+                if (userInput.Key == ConsoleKey.Y)
+                {
+                    contactManagement.RemoveAt(contactIndex);
+                    break;
+                }
+                else if (userInput.Key == ConsoleKey.N)
+                {
+                    Console.WriteLine("Cancel deleting contact...");
+                    Thread.Sleep(loadTime);
+                    Console.Clear();
+                    return;
+                }
+                else Console.WriteLine("Invalid input");
+            }
             var dataLines = new List<string>();
             for (int i = 0; i < contactManagement.Count; i++)
             {
@@ -88,6 +117,11 @@ namespace ProgramSystem
                 dataLines.Add($"{contactManagement[i].contactName},{contactManagement[i].contactEmail},{contactManagement[i].contactNumber}");
             }
             ProgramSystemDataClass.StringDataUpdate(dataLines); // Then put it into data file 'txt'
+            Thread.Sleep(loadTime);
+            Console.Clear();
+            Console.WriteLine("Deleting Successfuly...");
+            Thread.Sleep(1000);
+            Console.Clear();
         }
 
         public static void UpdatingContact(int indexContact)
@@ -97,12 +131,12 @@ namespace ProgramSystem
             // will remain at their default values. 
             string currentName = contactManagement[indexContact].contactName;
             string currentEmail = contactManagement[indexContact].contactEmail;
-            int currentNumber = contactManagement[indexContact].contactNumber;
+            long currentNumber = contactManagement[indexContact].contactNumber;
             // Another variabel for receive the value, which later will be updated according
             // to whetever the user giving input or not.
             string newName = currentName;
             string newEmail = currentEmail;
-            int newNumber = currentNumber;
+            long newNumber = currentNumber;
             // Using conditional Loop for the edit phase
             while (true)
             {
@@ -144,6 +178,7 @@ namespace ProgramSystem
                     contactManagement[indexContact].contactName = newName;
                     contactManagement[indexContact].contactEmail = newEmail;
                     contactManagement[indexContact].contactNumber = newNumber;
+                    Thread.Sleep(loadTime);
                     Console.WriteLine("Saving...");
                     var dataLines = new List<string>();
                     for (int i = 0; i < contactManagement.Count; i++)
@@ -170,14 +205,66 @@ namespace ProgramSystem
                 contact => contact.contactName.ToLower().Contains(searchContentLower) ||
                 contact.contactEmail.ToLower().Contains(searchContentLower)
             ).ToList(); // Using ToList() for copying data to a new List to perform search process
-            if (searchResult.Count == 0) Console.WriteLine("No result found...");
+            if (searchResult.Count == 0)
+            {
+                Thread.Sleep(loadTime);
+                Console.WriteLine("No result found...");
+            }
             else
             {
-                for (int i = 0; i < searchResult.Count; i++)
+                while (true)
                 {
-                    ProgramSystemClass contact = searchResult[i];
-                    Console.WriteLine($"{i + 1}. {contact.contactName}  |  {contact.contactEmail}  |  {contact.contactNumber}");
+                    for (int i = 0; i < searchResult.Count; i++)
+                    {
+                        ProgramSystemClass contact = searchResult[i];
+                        Console.WriteLine($"{i + 1}. {contact.contactName}  |  {contact.contactEmail}  |  {contact.contactNumber}");
+                    }
+                    Console.WriteLine("");
+                    ConsoleKeyInfo inputUser = Console.ReadKey();
+                    if (inputUser.Key == ConsoleKey.E)
+                    {
+                        break;
+                    }
                 }
+            }
+        }
+
+        public static void InformationContact(int contactIndex)
+        {
+            if (contactIndex > contactManagement.Count)
+            {
+                Console.WriteLine("Theres no contact with that index...");
+                Thread.Sleep(loadTime);
+                return;
+            }
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("===== Contact Information =====");
+                Console.WriteLine($"Name   : {contactManagement[contactIndex].contactName}");
+                Console.WriteLine($"Email  : {contactManagement[contactIndex].contactEmail}");
+                Console.WriteLine($"Number : {contactManagement[contactIndex].contactNumber}");
+                Console.WriteLine("-------------------------------");
+                Console.WriteLine("X - Delete  |  U - Edit  | E - Exit |");
+                ConsoleKeyInfo inputUser = Console.ReadKey(true);
+                if (inputUser.Key == ConsoleKey.X)
+                {
+                    Console.Clear();
+                    Thread.Sleep(loadTime);
+                    DeletingObjectContact(contactIndex);
+                    return;
+                }
+                else if (inputUser.Key == ConsoleKey.U)
+                {
+                    Console.Clear();
+                    Thread.Sleep(loadTime);
+                    UpdatingContact(contactIndex);
+                }
+                else if (inputUser.Key == ConsoleKey.E)
+                {
+                    return;
+                }
+                else Console.WriteLine("Invalid input...");
             }
         }
     }
