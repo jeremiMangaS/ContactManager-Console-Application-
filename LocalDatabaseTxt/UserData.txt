@@ -1,12 +1,5 @@
-Mangatur,    asdf, 123
-Mangatur,     asdf, 123
-sdfg,      wdef, 123
-Mangatur,     asdf, 123
-sdfg,      wdef, 123
-Mangatur,     asdf, 123
-sdfg,      wdef, 123
-Mangatur,     asdf, 123
-sdfg,      wdef, 123
-sdfg,      wdef, 123
-Mangatur,     asdf, 123
-Jurnal,   asd, 23
+Vincent Eresto M,Vinc@com,123
+Vatmawatri,Vand@com,234
+Huhahsau adadsjgaj asjhdjhds,Gaman@com,678
+Manhattan Winds,Guman@gmail.com,1234
+Frankeinstain,sdfd@com,1234

@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Runtime.CompilerServices;
 using ProgramSystem;
@@ -81,7 +82,18 @@ namespace MenuSystem
                 Console.WriteLine("Input invalid...");
                 return;
             }
-            ProgramSystemClass.DeletingObjectContact(contactIndex - 1);            
+            ProgramSystemClass.DeletingObjectContact(contactIndex - 1);
+        }
+
+        public static void UpdateContactMenu()
+        {
+            Console.Write("Enter contact index : ");
+            if (!int.TryParse(Console.ReadLine(), out int indexTarget))
+            {
+                Console.WriteLine("Invalid input");
+                return;
+            }
+            ProgramSystemClass.UpdatingContact(indexTarget - 1);
         }
 
     }
