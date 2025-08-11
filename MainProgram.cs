@@ -38,6 +38,7 @@ namespace MainProgram
                 else if (userInput.Key == ConsoleKey.S)
                 {
                     Console.WriteLine("Search");
+                    MenuSystemClass.SearchingContactMenu();
                 }
                 else if (userInput.Key == ConsoleKey.E)
                 {

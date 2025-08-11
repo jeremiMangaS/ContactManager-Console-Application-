@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using ProgramSystemData;
 
 namespace ProgramSystem
@@ -30,7 +31,7 @@ namespace ProgramSystem
             return newContact;
         }
 
-        public static void AddObjectToList(ProgramSystemClass newObject) => contactManagement.Add(newObject); 
+        public static void AddObjectToList(ProgramSystemClass newObject) => contactManagement.Add(newObject);
         // Adding object to the List
 
 
@@ -60,7 +61,7 @@ namespace ProgramSystem
             }
         }
 
-        public static void LoadData() 
+        public static void LoadData()
         {
             // For loading data from local database txt
             contactManagement.Clear();
@@ -91,14 +92,18 @@ namespace ProgramSystem
 
         public static void UpdatingContact(int indexContact)
         {
+            // Method for Edit/Updating contact.
+            // Default value for each variabel so that variables whose values are not edited
+            // will remain at their default values. 
             string currentName = contactManagement[indexContact].contactName;
             string currentEmail = contactManagement[indexContact].contactEmail;
             int currentNumber = contactManagement[indexContact].contactNumber;
-
+            // Another variabel for receive the value, which later will be updated according
+            // to whetever the user giving input or not.
             string newName = currentName;
             string newEmail = currentEmail;
             int newNumber = currentNumber;
-            
+            // Using conditional Loop for the edit phase
             while (true)
             {
                 if (indexContact > contactManagement.Count) { Console.WriteLine("Index can't be found..."); return; }
@@ -109,7 +114,7 @@ namespace ProgramSystem
                 Console.WriteLine($"D. Number = {newNumber}");
                 Console.WriteLine("Enter index column : ");
                 ConsoleKeyInfo column = Console.ReadKey(true);
-
+                // Using control flow statement for each input given by user
                 if (column.Key == ConsoleKey.A)
                 {
                     Console.Write("Name : ");
@@ -125,14 +130,8 @@ namespace ProgramSystem
                 else if (column.Key == ConsoleKey.D)
                 {
                     Console.Write("Number : ");
-                    if (!int.TryParse(Console.ReadLine(), out int inputNumber))
-                    {
-                        Console.WriteLine("Invalid input");
-                    }
-                    else
-                    {
-                        newNumber = inputNumber;
-                    }
+                    if (!int.TryParse(Console.ReadLine(), out int inputNumber)) Console.WriteLine("Invalid input");
+                    else newNumber = inputNumber;
                 }
                 else if (column.Key == ConsoleKey.E)
                 {
@@ -141,6 +140,7 @@ namespace ProgramSystem
                 }
                 else if (column.Key == ConsoleKey.F)
                 {
+                    // Saving statement for saving new contact data to the 'txt' file
                     contactManagement[indexContact].contactName = newName;
                     contactManagement[indexContact].contactEmail = newEmail;
                     contactManagement[indexContact].contactNumber = newNumber;
@@ -153,12 +153,32 @@ namespace ProgramSystem
                     ProgramSystemDataClass.StringDataUpdate(dataLines);
                     return;
                 }
-                else
-                {
-                    Console.WriteLine("Invalid input...");
-                }
+                else Console.WriteLine("Invalid input...");
             }
         }
 
+        public static void SearchingContacts(string searchContent)
+        {
+            // Method for searching a contact from the Name or Email
+            if (string.IsNullOrWhiteSpace(searchContent))
+            {
+                Console.WriteLine("Keywords cannot be empty");
+                return;
+            }
+            string searchContentLower = searchContent.ToLower();
+            List<ProgramSystemClass> searchResult = contactManagement.Where(
+                contact => contact.contactName.ToLower().Contains(searchContentLower) ||
+                contact.contactEmail.ToLower().Contains(searchContentLower)
+            ).ToList(); // Using ToList() for copying data to a new List to perform search process
+            if (searchResult.Count == 0) Console.WriteLine("No result found...");
+            else
+            {
+                for (int i = 0; i < searchResult.Count; i++)
+                {
+                    ProgramSystemClass contact = searchResult[i];
+                    Console.WriteLine($"{i + 1}. {contact.contactName}  |  {contact.contactEmail}  |  {contact.contactNumber}");
+                }
+            }
+        }
     }
 }

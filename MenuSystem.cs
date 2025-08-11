@@ -1,9 +1,6 @@
 using System;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
 using System.Runtime.CompilerServices;
 using ProgramSystem;
-using ProgramSystemData;
 
 namespace MenuSystem
 {
@@ -94,6 +91,13 @@ namespace MenuSystem
                 return;
             }
             ProgramSystemClass.UpdatingContact(indexTarget - 1);
+        }
+
+        public static void SearchingContactMenu()
+        {
+            Console.Write("Masukkan kata kunci : ");
+            string inputUser = Console.ReadLine();
+            ProgramSystemClass.SearchingContacts(inputUser);
         }
 
     }
