@@ -1,7 +1,8 @@
 using System;
-using System.Reflection.Metadata;
 using System.Threading;
+
 using ProgramSystem;
+using ProgramSystemNumber;
 
 namespace MenuSystem
 {
@@ -58,9 +59,11 @@ namespace MenuSystem
                 string contactEmail = Console.ReadLine();
                 Console.Write("Number : ");
                 string tempStringNumber = Console.ReadLine();
-                if (tempStringNumber.Length <= 16 && long.TryParse(Console.ReadLine(), out long contactNumber))
+                if (tempStringNumber.Length <= 16 && long.TryParse(tempStringNumber, out long contactNumber))
                 {
+                    Console.WriteLine("Test");
                     Console.Beep();
+                    Console.WriteLine("Berhasil");
                     ProgramSystemClass.AddObjectToList(ProgramSystemClass.CreatingObjectContact(contactName, contactEmail, contactNumber));
                     return;
                 }
@@ -118,17 +121,12 @@ namespace MenuSystem
                 {
                     Thread.Sleep(loadTime);
                     Console.WriteLine("More Information");
-                    MenuSystemClass.InfoContactMenu();                    
+                    MenuSystemClass.InfoContactMenu();
                 }
                 else if (userInput.Key == ConsoleKey.E)
                 {
                     Console.Clear();
                     Thread.Sleep(loadTime);
-                    Console.WriteLine("Exit the program....");
-                    Thread.Sleep(loadTime);
-                    Console.WriteLine("Thank you...");
-                    Thread.Sleep(1000);
-                    Console.Clear();
                     return;
                 }
                 else
@@ -178,8 +176,22 @@ namespace MenuSystem
         public static void InfoContactMenu()
         {
             Console.Write("Enter the index contact : ");
-            if (!int.TryParse(Console.ReadLine(), out int contactIndex)) ;
+            if (!int.TryParse(Console.ReadLine(), out int contactIndex)) return;
             ProgramSystemClass.InformationContact(contactIndex - 1);
+        }
+
+        public static void CountryContactMenu()
+        {
+            while (true)
+            {
+                ProgramSystemNumberClass.CodeLoad();
+                ConsoleKeyInfo userInput = Console.ReadKey();
+                if (userInput.Key == ConsoleKey.E)
+                {
+                    Console.Clear();
+                    return;
+                }
+            }
         }
     }
 }

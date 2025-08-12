@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Threading;
 using MenuSystem;
 using ProgramSystemData;
+using ProgramSystemNumber;
 
 namespace ProgramSystem
 {
@@ -80,7 +81,7 @@ namespace ProgramSystem
             for (int i = 0; i < getDataLine.Length; i++)
             {
                 string[] column = getDataLine[i].Split(',');
-                int.TryParse(column[2], out int numberColumn);
+                long.TryParse(column[2], out long numberColumn);
                 ProgramSystemClass newObject = new ProgramSystemClass(column[0], column[1], numberColumn);
                 contactManagement.Add(newObject);
             }
@@ -146,7 +147,7 @@ namespace ProgramSystem
                 Console.WriteLine($"A. Name = {newName}");
                 Console.WriteLine($"S. Email = {newEmail}");
                 Console.WriteLine($"D. Number = {newNumber}");
-                Console.WriteLine("Enter index column : ");
+                Console.Write("Enter index column : ");
                 ConsoleKeyInfo column = Console.ReadKey(true);
                 // Using control flow statement for each input given by user
                 if (column.Key == ConsoleKey.A)
@@ -164,8 +165,9 @@ namespace ProgramSystem
                 else if (column.Key == ConsoleKey.D)
                 {
                     Console.Write("Number : ");
-                    if (!int.TryParse(Console.ReadLine(), out int inputNumber)) Console.WriteLine("Invalid input");
-                    else newNumber = inputNumber;
+                    string tempStringNumber = Console.ReadLine();
+                    if (tempStringNumber.Length <= 16 && long.TryParse(tempStringNumber, out long inputNumber)) newNumber = inputNumber;
+                    else Console.WriteLine("Invalid input");
                 }
                 else if (column.Key == ConsoleKey.E)
                 {
@@ -240,10 +242,12 @@ namespace ProgramSystem
             while (true)
             {
                 Console.Clear();
+                long CountryNumber = contactManagement[contactIndex].contactNumber;
                 Console.WriteLine("===== Contact Information =====");
-                Console.WriteLine($"Name   : {contactManagement[contactIndex].contactName}");
-                Console.WriteLine($"Email  : {contactManagement[contactIndex].contactEmail}");
-                Console.WriteLine($"Number : {contactManagement[contactIndex].contactNumber}");
+                Console.WriteLine($"Name    : {contactManagement[contactIndex].contactName}");
+                Console.WriteLine($"Email   : {contactManagement[contactIndex].contactEmail}");
+                Console.WriteLine($"Number  : {contactManagement[contactIndex].contactNumber}");
+                Console.WriteLine($"Country : {ProgramSystemNumberClass.NumberCodeTake(CountryNumber)}");
                 Console.WriteLine("-------------------------------");
                 Console.WriteLine("X - Delete  |  U - Edit  | E - Exit |");
                 ConsoleKeyInfo inputUser = Console.ReadKey(true);

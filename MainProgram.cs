@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Formats.Asn1;
-using System.Linq;
 using System.Threading;
 
 using MenuSystem;
+using ProgramSystemNumber;
 
 namespace MainProgram
 {
@@ -60,7 +59,7 @@ namespace MainProgram
                 {
                     Thread.Sleep(loadTime);
                     Console.WriteLine("More Information");
-                    MenuSystemClass.InfoContactMenu();                    
+                    MenuSystemClass.InfoContactMenu();
                 }
                 else if (userInput.Key == ConsoleKey.E)
                 {
@@ -72,6 +71,13 @@ namespace MainProgram
                     Thread.Sleep(1000);
                     Console.Clear();
                     return;
+                }
+                // Additional feature
+                else if (userInput.Key == ConsoleKey.J)
+                {
+                    Console.Clear();
+                    Thread.Sleep(loadTime);
+                    MenuSystemClass.CountryContactMenu();
                 }
                 else
                 {
